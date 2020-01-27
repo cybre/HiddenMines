@@ -4,11 +4,9 @@
 #include "ui.h"
 
 HANDLE communication_thread;
-HANDLE stop_communication_event;
 
 void start_communication_loop()
 {
-    stop_communication_event = CreateEvent(NULL, TRUE, FALSE, NULL);
     communication_thread = CreateThread(NULL, 0, communication_loop, NULL, 0, NULL);
 }
 
@@ -77,5 +75,5 @@ DWORD WINAPI communication_loop()
 
         free(received_buf);
         free(command.parameter);
-    } while (result > 0 && WaitForSingleObject(stop_communication_event, 1) == WAIT_TIMEOUT);
+    } while (result > 0 && WaitForSingleObject(stop_client_event, 1) == WAIT_TIMEOUT);
 }

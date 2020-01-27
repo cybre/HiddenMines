@@ -7,6 +7,7 @@
 
 SOCKET client_socket = INVALID_SOCKET;
 bool game_is_running = false;
+HANDLE stop_client_event;
 
 void cleanup()
 {
@@ -96,10 +97,12 @@ int main(int argc, char *argv[])
     set_ui_name(name);
     clear_screen();
 
+    stop_client_event = CreateEvent(NULL, TRUE, FALSE, NULL);
+
     start_communication_loop();
     start_chat_loop();
 
-    WaitForSingleObject(chat_thread, INFINITE);
+    WaitForMultipleObjects(2, (HANDLE[]){ stop_client_event, chat_thread }, 1, INFINITE);
     sleep(1);
 
     cleanup();

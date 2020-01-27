@@ -8,11 +8,10 @@
 
 extern SOCKET client_socket;
 
+extern HANDLE stop_client_event;
+
 extern HANDLE chat_thread;
-
-extern HANDLE stop_communication_event;
 extern HANDLE communication_thread;
-
 extern HANDLE game_thread;
 
 extern bool game_is_running;
