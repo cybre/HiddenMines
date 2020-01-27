@@ -13,9 +13,9 @@ void start_communication_loop()
 DWORD WINAPI communication_loop()
 {
     int result = 0;
+    char *received_buf = malloc(DEFAULT_BUFLEN);
 
     do {
-        char *received_buf = malloc(DEFAULT_BUFLEN);
         result = recv(client_socket, received_buf, DEFAULT_BUFLEN, 0);
         if (result <= 0) {
             printf("recv failed: %d\n", WSAGetLastError());
@@ -73,7 +73,8 @@ DWORD WINAPI communication_loop()
             }
         }
 
-        free(received_buf);
         free(command.parameter);
     } while (result > 0 && WaitForSingleObject(stop_client_event, 1) == WAIT_TIMEOUT);
+
+    free(received_buf);
 }

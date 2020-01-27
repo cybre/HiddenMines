@@ -14,3 +14,5 @@ typedef struct {
     int distance_matrix[10][10];
     int num_of_hits;
 } Player;
+
+void free_player(void *data);

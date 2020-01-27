@@ -13,10 +13,11 @@ void start_player_loop(Player *player)
 DWORD WINAPI player_loop(void *data) {
     Player *player = (Player *)data;
     int result = 0;
+    char *received_buf = malloc(DEFAULT_BUFLEN);
+    char *message = malloc(DEFAULT_BUFLEN - 2);
 
     printf("\nListening for messages from client.\n");
     do {
-        char *received_buf = malloc(DEFAULT_BUFLEN);
         result = recv(player->socket, received_buf, DEFAULT_BUFLEN, 0);
 
         if (result <= 0) {
@@ -26,7 +27,6 @@ DWORD WINAPI player_loop(void *data) {
 
         Command command = parse_message(received_buf);
 
-        char *message = malloc(DEFAULT_BUFLEN - 2);
         switch (command.command_type) {
             case SET_PLAYER_NAME:
                 strcpy(player->name, command.parameter);
@@ -81,8 +81,6 @@ DWORD WINAPI player_loop(void *data) {
             default:
                 printf("Unknown message type: %d\n", (int)command.command_type);
         }
-        free(received_buf);
-        free(message);
         free(command.parameter);
     } while(result > 0);
 
@@ -93,6 +91,9 @@ DWORD WINAPI player_loop(void *data) {
         send_command_to_all_players(SEND_MESSAGE, leaveMessage);
         free(leaveMessage);
     }
+
+    free(received_buf);
+    free(message);
 
     closesocket(player->socket);
     CloseHandle(player->thread);

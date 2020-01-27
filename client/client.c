@@ -90,8 +90,10 @@ int main(int argc, char *argv[])
     printf("Successfully connected to server.\n");
 
     char name[15];
-    printf("Enter your name: ");
-    fgets(name, 15, stdin);
+    do {
+        printf("Unesi svoje ime (min 3, max 15 karaktera): ");
+        fgets(name, 15, stdin);
+    } while (strlen(name) < 4);
     send_command(SET_PLAYER_NAME, name);
 
     set_ui_name(name);

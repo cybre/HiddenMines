@@ -7,7 +7,6 @@ HANDLE stop_lobby_event;
 
 void start_lobby_loop()
 {
-
     stop_lobby_event = CreateEvent(NULL, TRUE, FALSE, NULL);
     lobby_thread = CreateThread(NULL, 0, lobby_loop, NULL, 0, NULL);
 }
